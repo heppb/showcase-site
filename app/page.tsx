@@ -1,14 +1,10 @@
 import Image from "next/image";
-import styles from "../styles.Home.module.css";
-import { GetStaticProps } from "next";
-import DiscogRecord from "./models/DiscogRecord";
+import styles from "../styles/Home.module.css";
 import DiscogResponse from "./models/DiscogResponse";
 
-interface PageProps {
-  records: DiscogRecord[];
-}
-
-export default function Home({ records }: PageProps) {
+export default async function Home() {
+  // Fetch data directly in a Server Component
+  const records = (await getRecords()).releases
   return (
     <div>
       <main className={styles.main}>
@@ -36,23 +32,10 @@ export default function Home({ records }: PageProps) {
     </div>
   );
 }
-export const getStaticProps: GetStaticProps = async () => {
-  try {
+async function getRecords() {
     const response = await fetch(
       `https://api.discogs.com/users/alexrabin/collection/folders/0/releases?token=${process.env.DISCOG_TOKEN}&per_page=100&sort=artist`
     );
-
     const data = (await response.json()) as DiscogResponse;
-    return {
-      props: {
-        records: data.releases,
-      },
-    };
-  } catch (error) {
-    return {
-      props: {
-        error,
-      },
-    };
+    return data
   }
-};
