@@ -2,15 +2,20 @@ import React from "react";
 import retrieveAlbum from "../utils/retrieveAlbum";
 import styles from "../styles/Home.module.css";
 import Image from "next/image";
+import Link from "next/link";
 
 
-export default async function Page() {
-  const albumGotten = (await getAlbums("28011864"))
+export default async function Page({params} : {params:any}) {
+  const { albumid } = params;
+  const albumGotten = (await getAlbums(albumid))
   const album = albumGotten.album
   const appleMusicID = albumGotten.appleMusicId
     return (
       <div>
         <main className={styles.main}>
+          <Link className={styles.card} href={`/`}>
+            <button>Back</button>
+          </Link>
           <div className={styles.card}>
             <h2>
               {album.basic_information.title} -{" "}
