@@ -6,6 +6,13 @@
     padding: 6rem;
     min-height: 100vh;
   }
+  .mainheader {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem;
+  }
   
   .description {
     display: inherit;
