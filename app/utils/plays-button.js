@@ -1,13 +1,15 @@
 'use client';
  
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
  
-export default function LikeButton() {
-  const [plays, setLikes] = useState(0);
- 
-  function handleClick() {
-    setLikes(plays + 1);
-  }
- 
-  return <button onClick={handleClick}>Plays ({plays})</button>;
+export default function UpdatedLikeButton({albumName}) {
+  const [plays, setLikes] = useState(Number(localStorage.getItem(albumName)) || 0);
+  
+  useEffect(() => {
+    localStorage.setItem(albumName, plays);
+  }, [plays]);
+
+  return (
+    <button onClick={(e) => setLikes(plays + 1)}>Plays ({plays})</button>
+  );
 }
