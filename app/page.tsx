@@ -3,6 +3,8 @@ import styles from "./styles/Home.module.css";
 import PlaysButton from "./utils/plays-button";
 import retrieveRecords from "./utils/retrieveRecords";
 import Link from "next/link";
+import ClearPlaysButton from "./utils/clear-plays-button";
+import CreateSpotifyWrappedButton from "./utils/spotifyWrapped"
 
 export default async function Home() {
   // Fetch data directly in a Server Component
@@ -11,8 +13,8 @@ export default async function Home() {
     <div>
       <div className={styles.mainheader}>
         <h1>Discogs Tracking Page with "Spotify Wrapped" Writeup</h1>
-        <button>Spotify Wrapped</button>
-        <button>Clear Plays</button>
+        <CreateSpotifyWrappedButton></CreateSpotifyWrappedButton>
+        <ClearPlaysButton></ClearPlaysButton>
       </div>
       <main className={styles.main}>
         <div className={styles.grid}>
@@ -55,15 +57,3 @@ async function getRecords() {
     }
 
   }
-async function clearLikes()
-{
-  const response = await clearLikes();
-  if(response !== null)
-    {
-      return response;
-    }
-    else
-    {
-      throw new Error("No records found");
-    }
-}

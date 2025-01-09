@@ -27,8 +27,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-      <Sidebar />
-        {children}
+        <div style={{ display: 'flex'}}>
+          <Sidebar />
+            {children}
+        </div>    
       </body>
     </html>
   );

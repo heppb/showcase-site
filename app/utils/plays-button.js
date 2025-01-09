@@ -10,6 +10,6 @@ export default function UpdatedLikeButton({albumName}) {
   }, [plays]);
 
   return (
-    <button onClick={(e) => setLikes(plays + 1)}>Plays ({plays})</button>
+    <button className='baseButton' onClick={(e) => setLikes(plays + 1)}>Plays ({plays})</button>
   );
 }

@@ -2,25 +2,19 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import styles from "../styles/Sidebar.module.css";
 
 const Sidebar = () => {
-  const [isOpen, setIsOpen] = useState(true);
-
   return (
-    <div className="lg:w-64 h-screen bg-gray-200 p-4">
-      <button onClick={() => setIsOpen(!isOpen)} className="lg:hidden">
-        Toggle Sidebar
-      </button>
-      {isOpen && (
-        <ul>
-          <li>
-            <Link href="/">Home</Link>
+    <div className={styles.sidebar}>
+        <ul className={styles.navList}>
+          <li className={styles.navItem}>
+            <Link href="/" className={styles.navLink}>Home</Link>
           </li>
-          <li>
-            <Link href="/about">About</Link>
+          <li className={styles.navItem}>
+            <Link href="/about" className={styles.navLink}>About</Link>
           </li>
         </ul>
-      )}
     </div>
   );
 };
