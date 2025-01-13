@@ -1,15 +1,16 @@
 import DiscogRecord from "./DiscogRecord";
 
 interface SpotifyWrappedModel {
-    records: DiscogRecordAndLikes[],
+    recordsAndPlays: RecordsAndPlays[],
     userData: UserData,
     albumData: AlbumData,
   }
 
-interface DiscogRecordAndLikes
+interface RecordsAndPlays
 {
     discogRecord : DiscogRecord
-    likeCount : number
+    playCount : number
+    timestamps: string[];
 }
 
 interface UserData

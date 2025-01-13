@@ -4,7 +4,7 @@ import PlaysButton from "./utils/plays-button";
 import retrieveRecords from "./utils/retrieveRecords";
 import Link from "next/link";
 import ClearPlaysButton from "./utils/clear-plays-button";
-import CreateSpotifyWrappedButton from "./utils/spotifyWrapped"
+import CreateSpotifyWrappedButton from "./utils/spotifyWrappedButton"
 
 export default async function Home() {
   // Fetch data directly in a Server Component
@@ -20,7 +20,7 @@ export default async function Home() {
         <div className={styles.grid}>
           {records.map((record, i) => {
             return (
-              <div>
+              <div key={record.basic_information.title}>
                 <PlaysButton albumName = {record.basic_information.title}></PlaysButton>
                 <Link className={styles.card} href={`/${record.id}`}>
                   <h2>
