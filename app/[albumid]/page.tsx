@@ -14,7 +14,7 @@ export default async function Page({params} : {params:any}) {
       <div>
         <main className={styles.main}>
           <Link className={styles.card} href={`/`}>
-            <button>Back</button>
+            <button className="baseButton">Back</button>
           </Link>
           <div className={styles.card}>
             <h2>

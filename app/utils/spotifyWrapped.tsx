@@ -2,5 +2,5 @@
 
 export default function CreateSpotifyWrappedButton()
 {
-    return <button className="baseButton playbutton">Spotify Wrapped</button>
+    return <a className="baseButton playbutton" href="/wrapped">Spotify Wrapped</a>
 }

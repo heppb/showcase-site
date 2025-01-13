@@ -1,0 +1,7 @@
+.gradientBackground {
+    position: absolute;
+    inset: 0; /* This is shorthand for top, right, bottom, and left: 0 */
+    background: linear-gradient(270deg, #6b46c1, #d53f8c, #f6e05e, #4c51bf);
+    z-index: -1; /* Ensures the background stays behind other elements */
+  }
+  

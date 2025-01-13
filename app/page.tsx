@@ -22,7 +22,7 @@ export default async function Home() {
             return (
               <div>
                 <PlaysButton albumName = {record.basic_information.title}></PlaysButton>
-                <Link key={i} className={styles.card} href={`/${record.id}`}>
+                <Link className={styles.card} href={`/${record.id}`}>
                   <h2>
                     {record.basic_information.title} -{" "}
                     {record.basic_information.artists[0].name}
