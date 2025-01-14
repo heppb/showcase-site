@@ -20,7 +20,7 @@ export default function UpdatedLikeButton({albumName}: { albumName: string }) {
   }, [plays, albumName]);
 
   const handlePlay = () => {
-    const timestamp = new Date().toISOString();
+    const timestamp = new Date().toLocaleString();
     setPlays((prev) => ({
       count: prev.count + 1,
       timestamps: [...prev.timestamps, timestamp], // Add the new timestamp
