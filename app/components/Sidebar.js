@@ -12,7 +12,7 @@ const Sidebar = () => {
             <Link href="/" className={styles.navLink}>Home</Link>
           </li>
           <li className={styles.navItem}>
-            <Link href="/about" className={styles.navLink}>About</Link>
+            <Link href="/discogTracking" className={styles.navLink}>Discog Tracking</Link>
           </li>
         </ul>
     </div>

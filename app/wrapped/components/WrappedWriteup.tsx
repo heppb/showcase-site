@@ -11,6 +11,8 @@ import Image from "next/image";
 export default function WrappedWriteup() {
   const [spotifyWrappedData, setSpotifyWrappedData] = useState<SpotifyWrappedModel | null>(null);
   const [loading, setLoading] = useState(true);
+  const [currentSection, setCurrentSection] = useState(0);
+  const user: string = (process.env.USER as string);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,7 +50,7 @@ export default function WrappedWriteup() {
 
     const userData = {
       wrappedYear: new Date().getFullYear(),
-      name: "Guest User",
+      name:  user || "Guest User",
     };
 
     const topAlbum = {
@@ -63,10 +65,24 @@ export default function WrappedWriteup() {
       return null;
     }
 
+    const genreCounts: { [key: string]: number } = {};
+
+    // Count the occurrence of each genre
+    recordsAndPlays.forEach(record => {
+      record.discogRecord.basic_information.genres.forEach((genre: string) => {
+        genreCounts[genre] = (genreCounts[genre] || 0) + 1;
+      });
+    });
+
+    const favoriteGenre = Object.entries(genreCounts)
+    .sort(([, countA], [, countB]) => countB - countA) // Sort by frequency
+    .map(([genre]) => genre)[0] || "Unknown Genre"; // Default to "Unknown Genre" if no genre found
+
+
     const albumData = {
       topAlbum,
       totalMinutes: recordsAndPlays.reduce((total, record) => total + record.playCount * 40, 0),
-      favoriteGenre: "Pop",
+      favoriteGenre: favoriteGenre,
       albumsListened: recordsAndPlays.length,
     };
 
@@ -90,7 +106,7 @@ export default function WrappedWriteup() {
     );
   }
 
-  if (!spotifyWrappedData) {
+  if (!spotifyWrappedData || spotifyWrappedData.recordsAndPlays.length === 0) {
     return (
       <motion.div
         initial={{ opacity: 0 }}
@@ -102,63 +118,137 @@ export default function WrappedWriteup() {
       </motion.div>
     );
   }
+    const sections = [
+      {
+        title: `Spotify Wrapped ${spotifyWrappedData.userData.wrappedYear}`,
+        content: `${spotifyWrappedData.userData.name}'s Highlights`,
+      },
+      {
+        title: 'Top Album',
+        content: `${spotifyWrappedData.albumData.topAlbum.title} by ${spotifyWrappedData.albumData.topAlbum.artist}`,
+        image: spotifyWrappedData.albumData.topAlbum.cover,
+      },
+      {
+        title: 'Fun Facts',
+        content: `You listened to ${spotifyWrappedData.albumData.totalMinutes} minutes of music this year, with ${spotifyWrappedData.albumData.favoriteGenre} as your favorite genre.`,
+      },
+      {
+        title: 'Top 5 Records',
+        content: spotifyWrappedData.recordsAndPlays
+          .sort((a, b) => b.playCount - a.playCount)
+          .slice(0, 5)
+          .map((record, index) => ({
+            text: `${index + 1}. ${record.discogRecord.basic_information.title} by ${record.discogRecord.basic_information.artists[0].name}`,
+            playCount: record.playCount,
+          })),
+      },
+    ];
+  
+    const handleNext = () => {
+      setCurrentSection((prev) => (prev + 1) % sections.length); // Loop back to the start
+    };
+    const current = sections[currentSection];
 
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 50 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -50 }}
-      transition={{ duration: 0.5 }}
-      className="wrapped-container"
-    >
-      <h1>Spotify Wrapped {spotifyWrappedData.userData.wrappedYear}</h1>
-      <h2>{spotifyWrappedData.userData.name}'s Summary</h2>
-
-      <div className="album-section">
-        <h3>Top Album</h3>
-        <p>
-          {spotifyWrappedData.albumData.topAlbum.title} by {spotifyWrappedData.albumData.topAlbum.artist} (
-          {spotifyWrappedData.albumData.topAlbum.year})
-        </p>
-        <div className={styles.imageContainer}>
-          <Image
-            src={spotifyWrappedData.albumData.topAlbum.cover}
-            alt={spotifyWrappedData.albumData.topAlbum.title}
-            fill
-            priority
-          />
-        </div>
-      </div>
-
-      <div className="records-section">
-        <h3>Top 5 Records</h3>
-        {spotifyWrappedData.recordsAndPlays
-        .sort((a, b) => b.playCount - a.playCount) // Sort by playCount in descending order
-        .slice(0, 5) // Take the top 5 records
-        .map((record, index) => (
-          <motion.div
-            key={index}
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: index * 0.1 }}
-            className="record-item"
+    return (
+      <motion.div
+        className={`${styles.gradientBackground} flex items-center justify-center h-screen`}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 1 }}
+      >
+        <div className="text-center">
+          <motion.h1
+            key={`title-${currentSection}`}
+            className="text-4xl font-bold text-white mb-6"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            transition={{ duration: 0.5 }}
           >
-            <p>Album: {record.discogRecord.basic_information.title}</p>
-            <div className={styles.imageContainer}>
-              <Image
-                src={record.discogRecord.basic_information.cover_image}
-                alt={record.discogRecord.basic_information.title}
-                fill
-                priority
-              />
-            </div>
-            <p>Artist: {record.discogRecord.basic_information.artists[0].name}</p>
-            <p>Year: {record.discogRecord.basic_information.year}</p>
-            <p>Plays: {record.playCount}</p>
-            <p>Last Played: {(record.timestamps[record.timestamps.length - 1]) || "N/A"}</p>
-          </motion.div>
-        ))}
-      </div>
-    </motion.div>
-  );
+            {current.title}
+          </motion.h1>
+  
+          {current.image && (
+            <motion.div
+              className="relative w-64 h-64 mx-auto mb-6"
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+             <div className={styles.imageContainer}>
+                <Image
+                  src={current.image}
+                  alt={current.title}
+                  fill
+                  priority
+                />
+              </div>
+            </motion.div>
+          )}
+  
+          {Array.isArray(current.content) ? (
+            <motion.ul
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              {current.content.map((item, index) => (
+                <motion.li
+                  key={index}
+                  className="text-xl text-white mb-2"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                >
+                  {item.text} - {item.playCount} Plays
+                </motion.li>
+              ))}
+            </motion.ul>
+          ) : (
+            <motion.p
+              key={`content-${currentSection}`}
+              className="text-lg text-white"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.5 }}
+            >
+              {current.content}
+            </motion.p>
+          )}
+  
+          <motion.button
+            onClick={handleNext}
+            className={styles.wrappedButton}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+          >
+          Next
+        </motion.button>
+        <motion.div
+          className={`${styles.progressIndicator}`}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          {sections.map((_, index) => (
+            <motion.div
+              key={index}
+              className={`${styles.progressDot} ${
+                index === currentSection ? styles.activeDot : ""
+              }`}
+              animate={{
+                scale: index === currentSection ? 1.5 : 1,
+                opacity: index === currentSection ? 1 : 0.5,
+              }}
+              transition={{ duration: 0.3 }}
+            />
+          ))}
+        </motion.div>
+        </div>
+      </motion.div>
+    );
 }

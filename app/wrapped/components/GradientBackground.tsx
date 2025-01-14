@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import styles from '/Users/Brian Hepp/Desktop/CodeProjects/NextJSApp/discogs-example/app/styles/GradiantBackground.module.css'
+import styles from '@/app/styles/GradiantBackground.module.css'
 
 export default function GradientBackground() {
   return (
