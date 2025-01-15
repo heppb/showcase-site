@@ -1,5 +1,5 @@
-import GradientBackground from './components/GradientBackground';
-import WrappedWriteup from './components/WrappedWriteup';
+import GradientBackground from '@/app/discogs-tracking/wrapped/components/GradientBackground';
+import WrappedWriteup from '@/app/discogs-tracking/wrapped/components/WrappedWriteup';
 import styles from '@/app/styles/Home.module.css';
 
 

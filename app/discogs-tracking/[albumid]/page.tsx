@@ -1,6 +1,6 @@
 import React from "react";
-import retrieveAlbum from "../utils/retrieveAlbum";
-import styles from "../styles/Home.module.css";
+import retrieveAlbum from "@/app/utils/retrieveAlbum";
+import styles from "@/app/styles/Home.module.css";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -13,7 +13,7 @@ export default async function Page({params} : {params:any}) {
     return (
       <div>
         <main className={styles.main}>
-          <Link className={styles.card} href={`/`}>
+          <Link className={styles.card} href={`/discogs-tracking/`}>
             <button className="baseButton">Back</button>
           </Link>
           <div className={styles.card}>
