@@ -23,7 +23,7 @@ export default function WrappedWriteup() {
           setSpotifyWrappedData(spotifyWrappedResponse);
         }
       } catch (error) {
-        console.error("Error fetching Spotify Wrapped data:", error);
+        console.error("Error fetching Discogs Wrapped data:", error);
       } finally {
         setLoading(false); // Ensure loading state updates
       }
@@ -99,9 +99,8 @@ export default function WrappedWriteup() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="loading-container"
       >
-        <p>Loading your Spotify Wrapped...</p>
+        <p>Loading your Discogs Wrapped...</p>
       </motion.div>
     );
   }
@@ -112,15 +111,14 @@ export default function WrappedWriteup() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="error-container"
       >
-        <p>Could not load your Spotify Wrapped data. Please try again later.</p>
+        <p>Could not load your Discogs Wrapped data. Please try again later.</p>
       </motion.div>
     );
   }
     const sections = [
       {
-        title: `Spotify Wrapped ${spotifyWrappedData.userData.wrappedYear}`,
+        title: `Discogs Wrapped ${spotifyWrappedData.userData.wrappedYear}`,
         content: `${spotifyWrappedData.userData.name}'s Highlights`,
       },
       {
@@ -140,6 +138,7 @@ export default function WrappedWriteup() {
           .map((record, index) => ({
             text: `${index + 1}. ${record.discogRecord.basic_information.title} by ${record.discogRecord.basic_information.artists[0].name}`,
             playCount: record.playCount,
+            lastPlayed: record.timestamps[record.timestamps.length - 1] || "N/A",
           })),
       },
     ];
@@ -151,7 +150,7 @@ export default function WrappedWriteup() {
 
     return (
       <motion.div
-        className={`${styles.gradientBackground} flex items-center justify-center h-screen`}
+        className={`${styles.wrappedContainer}`}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
@@ -160,7 +159,6 @@ export default function WrappedWriteup() {
         <div className="text-center">
           <motion.h1
             key={`title-${currentSection}`}
-            className="text-4xl font-bold text-white mb-6"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
@@ -171,7 +169,7 @@ export default function WrappedWriteup() {
   
           {current.image && (
             <motion.div
-              className="relative w-64 h-64 mx-auto mb-6"
+              className={styles.wrappedImageContainer}
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.8, opacity: 0 }}
@@ -198,19 +196,18 @@ export default function WrappedWriteup() {
               {current.content.map((item, index) => (
                 <motion.li
                   key={index}
-                  className="text-xl text-white mb-2"
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.1 }}
                 >
                   {item.text} - {item.playCount} Plays
+                  Last Played - {item.lastPlayed}
                 </motion.li>
               ))}
             </motion.ul>
           ) : (
             <motion.p
               key={`content-${currentSection}`}
-              className="text-lg text-white"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
