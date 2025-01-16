@@ -76,8 +76,8 @@ jobs:
       - name: Build with Next.js
         env:
           DISCOG_TOKEN: ${{ secrets.DISCOG_TOKEN }}
-          BASE_URL: ${{ secrets.BASE_URL }}
-          USER: ${{ secrets.USER }}
+          BASE_URL: ${{ vars.BASE_URL }}
+          USER: ${{ vars.USER }}
         run: ${{ steps.detect-package-manager.outputs.runner }} npm run build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
@@ -97,5 +97,5 @@ jobs:
         uses: actions/deploy-pages@v4
         env:
           DISCOG_TOKEN: ${{ secrets.DISCOG_TOKEN }}
-          BASE_URL: ${{ secrets.BASE_URL }}
-          USER: ${{ secrets.USER }}
+          BASE_URL: ${{ vars.BASE_URL }}
+          USER: ${{ vars.USER }}
