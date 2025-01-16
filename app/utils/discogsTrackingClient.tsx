@@ -87,7 +87,7 @@ function DiscogsTracking() {
         <div className={styles.noRecords}></div>
         </>
         }     
-      <button className='baseButton'
+      <button className={styles.baseLogoutButton}
         onClick={() => {
           localStorage.removeItem('user');
           window.location.reload(); // Reload the page to fetch records
