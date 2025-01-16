@@ -1,6 +1,7 @@
 import styles from "@/app/styles/Home.module.css"
 import Link from "next/link";
 import Image from "next/image";
+import { prefix } from "@/prefix";
 export default async function Home() {
   return (
     <div className={styles.main}>
@@ -12,7 +13,7 @@ export default async function Home() {
         </h2>
         <div className={styles.imageContainer}>
           <Image
-            src={"/discogslogo.png"}
+            src={`${prefix}/discogslogo.png`}
             alt="discogs-tracking"
             fill
             priority
