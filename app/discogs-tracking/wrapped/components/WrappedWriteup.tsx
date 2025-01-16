@@ -87,11 +87,12 @@ export default function WrappedWriteup() {
     } finally {
       setLoading(false); // Ensure loading state updates
     }
-  }, [gatherSpotifyWrappedData, retrieveRecords]);
+  }, [gatherSpotifyWrappedData]); // Remove retrieveRecords from the dependencies
 
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+
 
   if (loading) {
     return (
