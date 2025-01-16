@@ -12,10 +12,10 @@ const nextConfig = {
     ],
   },
   env: {
-    BASE_URL: process.env.BASE_URL,
-    DISCOG_TOKEN: process.env.DISCOG_TOKEN,
-    USER: process.env.USER,
+    BASE_URL: process.env.BASE_URL || "http://localhost:3000", // Fallback to localhost if not set
+    DISCOG_TOKEN: process.env.DISCOG_TOKEN || "", // Use local environment variable or fallback
+    USER: process.env.USER || "guest", // Default to "guest" for local testing
   },
 };
 
-module.exports = nextConfig;
+export default nextConfig;
