@@ -14,66 +14,67 @@ export default function WrappedWriteup() {
   const [currentSection, setCurrentSection] = useState(0);
   const user: string = process.env.USER as string;
 
-  const gatherSpotifyWrappedData = async (records: DiscogRecord[]): Promise<SpotifyWrappedModel | null> => {
-    if (!records || records.length === 0) {
-      return null;
-    }
+  const gatherSpotifyWrappedData = useCallback(
+    async (records: DiscogRecord[]): Promise<SpotifyWrappedModel | null> => {
+      if (!records || records.length === 0) {
+        return null;
+      }
 
-    const recordsAndPlays = records.map((record) => {
-      const storedData = localStorage.getItem(record.basic_information.title);
-      const playData = storedData ? JSON.parse(storedData) : { count: 0, timestamps: [] };
+      const recordsAndPlays = records.map((record) => {
+        const storedData = localStorage.getItem(record.basic_information.title);
+        const playData = storedData ? JSON.parse(storedData) : { count: 0, timestamps: [] };
+
+        return {
+          discogRecord: record,
+          playCount: playData.count,
+          timestamps: playData.timestamps,
+        };
+      });
+
+      const userData = {
+        wrappedYear: new Date().getFullYear(),
+        name: user || "Guest User",
+      };
+
+      const topAlbum = {
+        title: records[0]?.basic_information.title || "Unknown Album",
+        artist: records[0]?.basic_information.artists[0].name || "Unknown Artist",
+        year: records[0]?.basic_information.year || 0,
+        cover: records[0]?.basic_information.cover_image || "https://via.placeholder.com/150",
+      };
+
+      if (!topAlbum) {
+        console.warn("No top album available.");
+        return null;
+      }
+
+      const genreCounts: { [key: string]: number } = {};
+      recordsAndPlays.forEach((record) => {
+        record.discogRecord.basic_information.genres.forEach((genre: string) => {
+          genreCounts[genre] = (genreCounts[genre] || 0) + 1;
+        });
+      });
+
+      const favoriteGenre =
+        Object.entries(genreCounts)
+          .sort(([, countA], [, countB]) => countB - countA)
+          .map(([genre]) => genre)[0] || "Unknown Genre";
+
+      const albumData = {
+        topAlbum,
+        totalMinutes: recordsAndPlays.reduce((total, record) => total + record.playCount * 40, 0),
+        favoriteGenre,
+        albumsListened: recordsAndPlays.length,
+      };
 
       return {
-        discogRecord: record,
-        playCount: playData.count,
-        timestamps: playData.timestamps,
+        recordsAndPlays,
+        userData,
+        albumData,
       };
-    });
-
-    const userData = {
-      wrappedYear: new Date().getFullYear(),
-      name:  user || "Guest User",
-    };
-
-    const topAlbum = {
-      title: records[0]?.basic_information.title || "Unknown Album",
-      artist: records[0]?.basic_information.artists[0].name || "Unknown Artist",
-      year: records[0]?.basic_information.year || 0,
-      cover: records[0]?.basic_information.cover_image || "https://via.placeholder.com/150",
-    };
-
-    if (!topAlbum) {
-      console.warn("No top album available.");
-      return null;
-    }
-
-    const genreCounts: { [key: string]: number } = {};
-
-    // Count the occurrence of each genre
-    recordsAndPlays.forEach(record => {
-      record.discogRecord.basic_information.genres.forEach((genre: string) => {
-        genreCounts[genre] = (genreCounts[genre] || 0) + 1;
-      });
-    });
-
-    const favoriteGenre = Object.entries(genreCounts)
-    .sort(([, countA], [, countB]) => countB - countA) // Sort by frequency
-    .map(([genre]) => genre)[0] || "Unknown Genre"; // Default to "Unknown Genre" if no genre found
-
-
-    const albumData = {
-      topAlbum,
-      totalMinutes: recordsAndPlays.reduce((total, record) => total + record.playCount * 40, 0),
-      favoriteGenre: favoriteGenre,
-      albumsListened: recordsAndPlays.length,
-    };
-
-    return {
-      recordsAndPlays: recordsAndPlays,
-      userData,
-      albumData,
-    };
-  };
+    },
+    [user]
+  );
 
   const fetchData = useCallback(async () => {
     try {
