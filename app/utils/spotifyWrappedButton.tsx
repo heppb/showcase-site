@@ -1,6 +1,12 @@
 'use client';
 
+import Link from 'next/link';
+
 export default function CreateSpotifyWrappedButton()
 {
-    return <a className="baseButton playbutton" href="/discogs-tracking/wrapped">Spotify Wrapped</a>
+    return (
+    <Link href="/discogs-tracking/wrapped">
+        <button className="baseButton playbutton">Spotify Wrapped</button>
+    </Link>
+    );
 }

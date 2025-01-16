@@ -9,7 +9,7 @@ const retrieveRecords = async (): Promise<DiscogResponse | null> => {
 
     const data = (await response.json()) as DiscogResponse;
     return data;
-  } catch (e) {
+  } catch {
     return null;
   }
 };

@@ -13,6 +13,9 @@
     align-items: center;
     padding: 2rem;
   }
+  .loginSpacing{
+    min-height: 25vh;
+  }
   
   .description {
     display: inherit;
@@ -255,6 +258,10 @@
     padding: 12px 16px;
     margin: 10px;
     flex: 1 1 0%;
+  }
+  .marginBottom
+  {
+    margin-bottom: 10px;
   }
   
   /* Enable hover only on non-touch devices */

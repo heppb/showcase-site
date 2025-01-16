@@ -47,11 +47,11 @@ function DiscogsTracking() {
 
   if (!userExists) {
     return (
-      <div className={styles.mainheader}>
+      <div className={  ` ${styles.mainheader} ${styles.loginSpacing}`  }>
         <h2>Enter User Info</h2>
-        <p>Please enter your Discogs username to proceed.</p>
-        <input type="text" placeholder="Enter your username" id="username" />
-        <button
+        <p className={styles.marginBottom}>Please enter your Discogs username to proceed.</p>
+        <input type="text" placeholder="Enter your username" id="username"/>
+        <button className={styles.baseLogoutButton}
           onClick={() => {
             const username = (document.getElementById("username") as HTMLInputElement)?.value;
             if (username) {
@@ -62,8 +62,8 @@ function DiscogsTracking() {
         >
           Submit
         </button>
-        <p>Don't have an account? Use our default guest user</p>
-        <button
+        <p>Don&apos;t have an account? Use our default guest user</p>
+        <button className={styles.baseLogoutButton}
           onClick={() => {
               localStorage.setItem('user', (process.env.USER || ""));
               window.location.reload(); // Reload the page to fetch records
@@ -78,7 +78,7 @@ function DiscogsTracking() {
   return (
     <div>
     <div className={styles.mainheader}>
-      <h1>Discogs Tracking Page with "Spotify Wrapped" Writeup</h1>
+      <h1>Discogs Tracking Page with &quot;Spotify Wrapped&quot; Writeup</h1>
       {records ?(
         <>
         <CreateSpotifyWrappedButton />

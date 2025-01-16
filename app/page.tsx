@@ -4,7 +4,7 @@ import Image from "next/image";
 export default async function Home() {
   return (
     <div className={styles.main}>
-      <h1>Welcome to Brian Hepp's Development Collection</h1>
+      <h1>Welcome to Brian Hepp&apos;s Development Collection</h1>
       <h2>Check out the following projects on the sidebar, or by clicking on their relevant images</h2>
       <Link className={styles.card} href={`/discogs-tracking/`}>
         <h2>

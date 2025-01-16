@@ -48,7 +48,7 @@ const retrieveAlbums = async (appleMusicId : string): Promise<(PageProps) | null
               album,
               appleMusicId: result.collectionId,
           };
-      } catch (e) {
+      } catch {
         return null;
       }
     };

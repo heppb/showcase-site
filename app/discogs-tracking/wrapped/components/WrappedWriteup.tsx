@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import DiscogRecord from "@/app/models/DiscogRecord";
 import SpotifyWrappedModel from "@/app/models/SpotifyWrappedModel";
@@ -12,25 +12,7 @@ export default function WrappedWriteup() {
   const [spotifyWrappedData, setSpotifyWrappedData] = useState<SpotifyWrappedModel | null>(null);
   const [loading, setLoading] = useState(true);
   const [currentSection, setCurrentSection] = useState(0);
-  const user: string = (process.env.USER as string);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const records = await retrieveRecords();
-        if (records !== null) {
-          const spotifyWrappedResponse = await gatherSpotifyWrappedData(records.releases);
-          setSpotifyWrappedData(spotifyWrappedResponse);
-        }
-      } catch (error) {
-        console.error("Error fetching Discogs Wrapped data:", error);
-      } finally {
-        setLoading(false); // Ensure loading state updates
-      }
-    };
-
-    fetchData();
-  }, []);
+  const user: string = process.env.USER as string;
 
   const gatherSpotifyWrappedData = async (records: DiscogRecord[]): Promise<SpotifyWrappedModel | null> => {
     if (!records || records.length === 0) {
@@ -92,6 +74,24 @@ export default function WrappedWriteup() {
       albumData,
     };
   };
+
+  const fetchData = useCallback(async () => {
+    try {
+      const records = await retrieveRecords();
+      if (records !== null) {
+        const spotifyWrappedResponse = await gatherSpotifyWrappedData(records.releases);
+        setSpotifyWrappedData(spotifyWrappedResponse);
+      }
+    } catch (error) {
+      console.error("Error fetching Discogs Wrapped data:", error);
+    } finally {
+      setLoading(false); // Ensure loading state updates
+    }
+  }, [gatherSpotifyWrappedData, retrieveRecords]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   if (loading) {
     return (
