@@ -2,11 +2,16 @@
  
 import React, { useState, useEffect } from 'react';
 
-export default function ClearPlaysButton()
+export default function ClearPlaysButton({albumNames}:{albumNames : string[]})
 {
   const handleClearLocalStorage = () => {
-    //This is not clean I need to get the remove item array import in working and then a state update after on the child buttons
-    localStorage.clear();
+    
+    const keysToRemove = albumNames; // Replace with actual keys
+
+    // Loop through the keys and remove them
+    keysToRemove.forEach((key) => {
+      localStorage.removeItem(key);
+    });
     location.reload();
   };
 

@@ -230,6 +230,19 @@
     height: 100vh;
     overflow: hidden;
   }
+  .noRecords {
+    text-align: center;
+    margin-top: 2rem;
+  }
+  
+  .noRecords h2 {
+    font-size: 1.5rem;
+    color: #555;
+  }
+  
+  .noRecords p {
+    color: #777;
+  }
   
   /* Enable hover only on non-touch devices */
   @media (hover: hover) and (pointer: fine) {
