@@ -102,7 +102,7 @@ function DiscogsTracking() {
           {records.map((record) => (
             <div key={record.basic_information.title}>
               <PlaysButton albumName={record.basic_information.title} />
-              <Link className={styles.card} href={`/discogs-tracking/${record.id}`}>
+              <Link className={styles.card} href={`/discogs-tracking/album?albumID=${record.id}`}>
                 <h2>
                   {record.basic_information.title} - {record.basic_information.artists[0].name}
                 </h2>
