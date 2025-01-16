@@ -65,7 +65,7 @@ function DiscogsTracking() {
         <p>Don&apos;t have an account? Use our default guest user</p>
         <button className={styles.baseLogoutButton}
           onClick={() => {
-              localStorage.setItem('user', (process.env.USER || ""));
+              localStorage.setItem('user', (process.env.USER || "DrFrappuccino"));
               window.location.reload(); // Reload the page to fetch records
           }}
         >
