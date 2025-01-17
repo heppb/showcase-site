@@ -29,6 +29,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Debug Environment
+        run: |
+          if [ -z "$DISCOG_TOKEN" ]; then
+            echo "DISCOG_TOKEN is not set"
+            exit 1
+          else
+            echo "DISCOG_TOKEN is set"
+          fi
       - name: Checkout
         uses: actions/checkout@v4
       - name: Detect package manager
