@@ -31,7 +31,8 @@ jobs:
     steps:
       - name: Debug Environment
         run: |
-          if [ -z "$DISCOG_TOKEN" ]; then
+          printenv
+          if [ -z "DISCOG_TOKEN" ]; then
             echo "DISCOG_TOKEN is not set"
             exit 1
           else
