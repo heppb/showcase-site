@@ -59,7 +59,6 @@ const RetrieveAlbumsClient: React.FC<RetrieveAlbumsClientProps> = ({ albumid }) 
             alt={albumData.basic_information.title}
             fill
             priority
-            unoptimized //allows working with github pages
           />
         </div>
       </div>

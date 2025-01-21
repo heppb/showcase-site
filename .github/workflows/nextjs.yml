@@ -25,19 +25,23 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  debug:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Debug Deployment Environment
+        run: |
+          if [ -z "$DISCOG_TOKEN" ]; then
+            echo "DISCOG_TOKEN is not set in deployment"
+            exit 1
+          else
+            echo "DISCOG_TOKEN is set in deployment"
+          fi
+        env:
+          DISCOG_TOKEN: ${{ secrets.DISCOG_TOKEN }}
   # Build job
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Debug Environment
-        run: |
-          printenv
-          if [ -z "DISCOG_TOKEN" ]; then
-            echo "DISCOG_TOKEN is not set"
-            exit 1
-          else
-            echo "DISCOG_TOKEN is set"
-          fi
       - name: Checkout
         uses: actions/checkout@v4
       - name: Detect package manager
@@ -82,6 +86,16 @@ jobs:
             ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
+      - name: Test DISCOG_TOKEN in build step
+        run: |
+          if [ -z "$DISCOG_TOKEN" ]; then
+            echo "DISCOG_TOKEN is NOT set"
+            exit 1
+          else
+            echo "DISCOG_TOKEN is set"
+          fi
+        env:
+          DISCOG_TOKEN: ${{ secrets.DISCOG_TOKEN }}
       - name: Build with Next.js
         run: ${{ steps.detect-package-manager.outputs.runner }} npm run build
         env:
@@ -101,6 +115,16 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
+      - name: Test DISCOG_TOKEN in deploy step
+        run: |
+          if [ -z "$DISCOG_TOKEN" ]; then
+            echo "DISCOG_TOKEN is NOT set"
+            exit 1
+          else
+            echo "DISCOG_TOKEN is set"
+          fi
+        env:
+          DISCOG_TOKEN: ${{ secrets.DISCOG_TOKEN }}
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4

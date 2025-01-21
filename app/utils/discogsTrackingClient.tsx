@@ -112,7 +112,6 @@ function DiscogsTracking() {
                     alt={record.basic_information.title}
                     fill
                     priority
-                    unoptimized //allows working with github pages
                   />
                 </div>
               </Link>
