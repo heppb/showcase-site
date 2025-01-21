@@ -183,6 +183,7 @@ export default function WrappedWriteup() {
                   alt={current.title}
                   fill
                   priority
+                  unoptimized //allows working with github pages
                 />
               </div>
             </motion.div>
