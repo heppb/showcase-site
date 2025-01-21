@@ -26,7 +26,7 @@ const retrieveAlbums = async (appleMusicId: string): Promise<PageProps | null> =
     if (!album) {
       throw new Error("No album found with the given ID");
     }
-
+    console.log("Determining SRC Issues", album.basic_information.cover_image);
     const albumName = album.basic_information.title.toLowerCase();
     const artistName = album.basic_information.artists[0].name.toLowerCase();
     const searchTerm = (albumName + " " + artistName).replaceAll(" ", "+");
