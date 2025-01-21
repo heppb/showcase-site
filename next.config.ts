@@ -6,11 +6,31 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "**",
+        hostname: "i.discogs.com",
         port: "",
         pathname: "/**",
       },
     ],
+  },
+  async headers() {
+    return [
+      {
+        // Match all routes
+        source: "/:path*",
+        headers: [
+          {
+            key: "Content-Security-Policy",
+            value: `
+              default-src 'none'; 
+              style-src 'unsafe-inline'; 
+              img-src 'self' data: https://i.discogs.com; 
+              connect-src 'self' https://api.discogs.com; 
+              script-src 'self';
+            `.replace(/\n/g, ""), // Minimize whitespace
+          },
+        ],
+      },
+    ];
   },
   env: {
     BASE_URL: process.env.BASE_URL || "http://localhost:3000", // Fallback to localhost if not set
