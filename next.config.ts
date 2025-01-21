@@ -6,7 +6,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "i.discogs.com",
+        hostname: "**",
         port: "",
         pathname: "/**",
       },
