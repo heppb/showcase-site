@@ -13,6 +13,14 @@
     align-items: center;
     padding: 2rem;
   }
+  .mainCoolProjects {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    padding: 6rem;
+    min-height: 100vh;
+  }
   .loginSpacing{
     min-height: 25vh;
   }
@@ -262,6 +270,18 @@
   .marginBottom
   {
     margin-bottom: 10px;
+  }
+  .flexPage
+  {
+    display: flex;
+    text-align: center;
+  }
+  .flexPageCoolProjects
+  {
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: space-around;
   }
   
   /* Enable hover only on non-touch devices */

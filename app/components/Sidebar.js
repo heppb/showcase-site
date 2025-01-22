@@ -13,6 +13,9 @@ const Sidebar = () => {
           <li className={styles.navItem}>
             <Link href="/discogs-tracking" className={styles.navLink}>Discogs Tracking</Link>
           </li>
+          <li className={styles.navItem}>
+            <Link href="/cool-projects" className={styles.navLink}>Cool Projects</Link>
+          </li>
         </ul>
     </div>
   );

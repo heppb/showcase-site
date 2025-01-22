@@ -55,7 +55,7 @@ function DiscogsTracking() {
           onClick={() => {
             const username = (document.getElementById("username") as HTMLInputElement)?.value;
             if (username) {
-              localStorage.setItem('user', JSON.stringify({ username }));
+              localStorage.setItem('user', username );
               window.location.reload(); // Reload the page to fetch records
             }
           }}
