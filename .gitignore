@@ -41,3 +41,4 @@ next-env.d.ts
 
 #vscodedev
 .vscode*
+.github/workflows/testsecrets.yml

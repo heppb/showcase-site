@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  basePath:'/showcase-site',
+  //basePath:'/showcase-site', //Don't need this for Vercel deployment
   images: {
     remotePatterns: [
       {
