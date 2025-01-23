@@ -35,12 +35,13 @@ export default function WrappedWriteup() {
         wrappedYear: new Date().getFullYear(),
         name: user || "Guest User",
       };
-
+      
+      const sortedRecords = recordsAndPlays.sort((a, b) => b.playCount - a.playCount);
       const topAlbum = {
-        title: records[0]?.basic_information.title || "Unknown Album",
-        artist: records[0]?.basic_information.artists[0].name || "Unknown Artist",
-        year: records[0]?.basic_information.year || 0,
-        cover: records[0]?.basic_information.cover_image || "https://via.placeholder.com/150",
+        title: sortedRecords[0]?.discogRecord.basic_information.title || "Unknown Album",
+        artist: sortedRecords[0]?.discogRecord.basic_information.artists[0].name || "Unknown Artist",
+        year: sortedRecords[0]?.discogRecord.basic_information.year || 0,
+        cover: sortedRecords[0]?.discogRecord.basic_information.cover_image || "https://via.placeholder.com/150",
       };
 
       if (!topAlbum) {
