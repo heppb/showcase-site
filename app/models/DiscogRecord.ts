@@ -18,6 +18,7 @@ interface DiscogRecord {
     master_url: string;
     resource_url: string;
     formats: Formats[];
+    albumLength: number; //not a part of original API call
   }
   
   interface Formats {

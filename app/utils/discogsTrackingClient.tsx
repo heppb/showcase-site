@@ -101,7 +101,7 @@ function DiscogsTracking() {
         <div className={styles.grid}>
           {records.map((record) => (
             <div key={record.basic_information.title}>
-              <PlaysButton albumName={record.basic_information.title} />
+              <PlaysButton albumName={record.basic_information.title} albumID={record.basic_information.id} />
               <Link className={styles.card} href={`/discogs-tracking/album?albumID=${record.id}`}>
                 <h2>
                   {record.basic_information.title} - {record.basic_information.artists[0].name}
@@ -138,5 +138,6 @@ async function getRecords() {
     throw new Error("No records found");
   }
 }
+
 
 export default DiscogsTracking;

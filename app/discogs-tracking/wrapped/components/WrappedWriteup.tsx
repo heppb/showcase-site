@@ -13,6 +13,7 @@ export default function WrappedWriteup() {
   const [loading, setLoading] = useState(true);
   const [currentSection, setCurrentSection] = useState(0);
   const user: string = process.env.USER as string;
+  
 
   const gatherSpotifyWrappedData = useCallback(
     async (records: DiscogRecord[]): Promise<SpotifyWrappedModel | null> => {
@@ -22,6 +23,10 @@ export default function WrappedWriteup() {
 
       const recordsAndPlays = records.map((record) => {
         const storedData = localStorage.getItem(record.basic_information.title);
+        const durationKey = `albumDuration_${record.basic_information.id}`;
+        const albumLength = localStorage.getItem(durationKey);
+        console.log("AlbumLength = " + albumLength);
+        record.basic_information.albumLength = Number(albumLength);
         const playData = storedData ? JSON.parse(storedData) : { count: 0, timestamps: [] };
 
         return {
@@ -63,7 +68,7 @@ export default function WrappedWriteup() {
 
       const albumData = {
         topAlbum,
-        totalMinutes: recordsAndPlays.reduce((total, record) => total + record.playCount * 40, 0),
+        totalMinutes: recordsAndPlays.reduce((total, record) => total + record.playCount * (record.discogRecord.basic_information.albumLength | 40), 0),
         favoriteGenre,
         albumsListened: recordsAndPlays.length,
       };
