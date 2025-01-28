@@ -25,8 +25,5 @@ export async function calculateAlbumLength(releaseId: string): Promise<number> {
     }
   });
 
-  const minutes = Math.floor(totalSeconds / 60);
-  const seconds = totalSeconds % 60;
-
   return totalSeconds / 60;
 }
