@@ -1,6 +1,6 @@
 import DiscogResponse from "../models/DiscogResponse";
 
-const retrieveRecords = async (page: Number, perPage: Number): Promise<DiscogResponse | null> => {
+const retrieveRecords = async (page: number, perPage: number): Promise<DiscogResponse | null> => {
   try {
     const user: string = localStorage.getItem('user') || (process.env.USER || "");
     const token: string = process.env.DISCOG_TOKEN || "";

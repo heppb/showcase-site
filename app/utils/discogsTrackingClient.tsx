@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Image from "next/image";
 import styles from "@/app/styles/Home.module.css";
 import PlaysButton from "@/app/utils/plays-button";
@@ -20,6 +20,16 @@ function DiscogsTracking() {
   const [sortField, setSortField] = useState<'artist' | 'title' | 'genre' | 'year'>('artist'); // Default sort by artist
   const [searchTerm, setSearchTerm] = useState('');
 
+  const fetchRecords = useCallback(async (newPage = 1) => {
+    try {
+      const response = await getRecords(newPage, 100);
+      setRecords(response.releases);
+      setTotalPages(response?.pagination?.pages || 1);
+    } catch (error) {
+      console.error("Error fetching records:", error);
+    }
+  }, []); // No dependencies since `getRecords` is assumed to be stable.
+  
   useEffect(() => {
     const checkUser = async () => {
       const userData = localStorage.getItem('user');
@@ -50,24 +60,8 @@ function DiscogsTracking() {
       throw new Error("No records found");
     }
   }
-
-  const fetchRecords = async (newPage = 1) => {
-    try {
-      const response = await getRecords(newPage, 100);
-      setRecords(response.releases);
-      setTotalPages(response?.pagination?.pages || 1);
-    } catch (error) {
-      console.error("Error fetching records:", error);
-    }
-  };
-
-  useEffect(() => {
-    if (records.length > 0) {
-      sortRecords();
-    }
-  }, [sortField, sortOrder]); // Re-run sorting whenever field or order changes
   
-  const sortRecords = () => {
+  const sortRecords = useCallback(() => {
     setRecords((prevRecords) => {
       return [...prevRecords].sort((a, b) => {
         let aPrimary = "";
@@ -89,14 +83,10 @@ function DiscogsTracking() {
           case "genre":
             aPrimary = a.basic_information.genres[0]?.toLowerCase() || "";
             bPrimary = b.basic_information.genres[0]?.toLowerCase() || "";
-            aSecondary = a.basic_information.title.toLowerCase();
-            bSecondary = b.basic_information.title.toLowerCase();
             break;
           case "year":
             aPrimary = a.basic_information.year?.toString() || "";
             bPrimary = b.basic_information.year?.toString() || "";
-            aSecondary = a.basic_information.title.toLowerCase();
-            bSecondary = b.basic_information.title.toLowerCase();
             break;
           default:
             aPrimary = a.basic_information.title.toLowerCase();
@@ -113,7 +103,13 @@ function DiscogsTracking() {
         return primaryComparison;
       });
     });
-  };
+  }, [sortField, sortOrder]);
+
+  useEffect(() => {
+    if (records.length > 0) {
+      sortRecords();
+    }
+  }, [records.length, sortRecords]);
   
 
   const filteredRecords = records.filter(record => {
