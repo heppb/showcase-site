@@ -49,7 +49,7 @@ function DiscogsTracking() {
     if (typeof window !== 'undefined') {
       checkUser();
     }
-  }, [page]);
+  }, [page, fetchRecords]);
 
   async function getRecords(page: number, perPage: number) {
     try {
