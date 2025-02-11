@@ -1,7 +1,6 @@
 import DiscogRelease from "../models/DiscogRelease";
 
 async function retrieveIndividualRecord (releaseId : string): Promise<DiscogRelease> {
-  const user: string = localStorage.getItem('user') || (process.env.USER || "");
   const token: string = process.env.DISCOG_TOKEN || "";
   const response = await fetch(`https://api.discogs.com/releases/${releaseId}?token=${token}`);
   if (!response.ok) {
