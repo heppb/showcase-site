@@ -13,7 +13,7 @@ const retrieveAlbums = async (appleMusicId: string): Promise<PageProps | null> =
       throw new Error("No valid albumId provided");
     }
 
-    const data = await retrieveRecords();
+    const data = await retrieveRecords(1, 100);
     console.log("Retrieve Records Response:", data);
 
     if (!data || !data.releases || data.releases.length === 0) {
