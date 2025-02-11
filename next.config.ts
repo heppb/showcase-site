@@ -11,6 +11,7 @@ const nextConfig = {
         pathname: "/**",
       },
     ],
+    domains: ["img.discogs.com", "st.discogs.com"],
   },
   env: {
     BASE_URL: process.env.BASE_URL || "http://localhost:3000", // Fallback to localhost if not set
