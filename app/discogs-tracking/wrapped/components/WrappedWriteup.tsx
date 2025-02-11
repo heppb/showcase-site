@@ -84,7 +84,7 @@ export default function WrappedWriteup() {
 
   const fetchData = useCallback(async () => {
     try {
-      const records = await retrieveRecords(1, 100);
+      const records = await retrieveRecords(1, 100, true);
       if (records !== null) {
         const spotifyWrappedResponse = await gatherSpotifyWrappedData(records.releases);
         setSpotifyWrappedData(spotifyWrappedResponse);

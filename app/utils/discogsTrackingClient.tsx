@@ -53,7 +53,7 @@ function DiscogsTracking() {
 
   async function getRecords(page: number, perPage: number) {
     try {
-      const response = await retrieveRecords(page, perPage);
+      const response = await retrieveRecords(page, perPage, false);
       return response || { releases: [], pagination: null };
     } catch (error) {
       console.error("Error retrieving records:", error);

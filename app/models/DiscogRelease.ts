@@ -1,7 +1,9 @@
 interface DiscogRelease {
     id: number;
     title: string;
+    thumb: string;
     tracklist: Track[];
+    artists: Artist[];
   }
   
 interface Track {
@@ -9,5 +11,8 @@ interface Track {
     title: string;
     duration?: string; // e.g., "4:30" (optional since not all tracks include durations)
   }
+interface Artist{
+  name: string;
+}
 
 export default DiscogRelease;

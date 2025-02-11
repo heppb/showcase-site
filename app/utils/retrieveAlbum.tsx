@@ -1,8 +1,8 @@
-import DiscogRecord from "../models/DiscogRecord";
-import retrieveRecords from "./retrieveRecords";
+import DiscogRelease from "../models/DiscogRelease";
+import retrieveIndividualRecord from "./retrieveIndividualRecord";
 
 interface PageProps {
-  album: DiscogRecord;
+  data: DiscogRelease;
   appleMusicId: string;
 }
 
@@ -13,22 +13,16 @@ const retrieveAlbums = async (appleMusicId: string): Promise<PageProps | null> =
       throw new Error("No valid albumId provided");
     }
 
-    const data = await retrieveRecords(1, 100);
+    const data = await retrieveIndividualRecord(appleMusicId);
     console.log("Retrieve Records Response:", data);
 
-    if (!data || !data.releases || data.releases.length === 0) {
+    if (!data) {
       throw new Error("No records found");
     }
 
-    const album = data.releases.find((a) => a.id === parseInt(appleMusicId));
-    console.log("Album Found:", album);
-
-    if (!album) {
-      throw new Error("No album found with the given ID");
-    }
-    console.log("Determining SRC Issues", album.basic_information.cover_image);
-    const albumName = album.basic_information.title.toLowerCase();
-    const artistName = album.basic_information.artists[0].name.toLowerCase();
+    console.log("Determining SRC Issues", data.thumb);
+    const albumName = data.title.toLowerCase();
+    const artistName = data.artists[0].name.toLowerCase();
     const searchTerm = (albumName + " " + artistName).replaceAll(" ", "+");
     console.log("Search Term for iTunes:", searchTerm);
 
@@ -58,7 +52,7 @@ const retrieveAlbums = async (appleMusicId: string): Promise<PageProps | null> =
     }
 
     return {
-      album,
+      data,
       appleMusicId: result.collectionId,
     };
   } catch (error) {

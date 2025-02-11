@@ -28,7 +28,7 @@ interface DiscogRecord {
     text: string;
   }
   
-  export interface Artist {
+  interface Artist {
     anv: string;
     id: string;
     name: string;

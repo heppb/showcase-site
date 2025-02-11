@@ -5,13 +5,14 @@ import retrieveAlbums from "@/app/utils/retrieveAlbum";
 import styles from "@/app/styles/Home.module.css";
 import Image from "next/image";
 import Link from "next/link";
+import DiscogRelease from "@/app/models/DiscogRelease";
 
 interface RetrieveAlbumsClientProps {
   albumid: string;
 }
 
 const RetrieveAlbumsClient: React.FC<RetrieveAlbumsClientProps> = ({ albumid }) => {
-  const [albumData, setAlbumData] = useState<any>(null);
+  const [albumData, setAlbumData] = useState<DiscogRelease | null>(null);
   const [appleMusicID, setAppleMusicID] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -21,7 +22,7 @@ const RetrieveAlbumsClient: React.FC<RetrieveAlbumsClientProps> = ({ albumid }) 
       try {
         const response = await retrieveAlbums(albumid);
         if (response) {
-          setAlbumData(response.album);
+          setAlbumData(response.data);
           setAppleMusicID(response.appleMusicId);
         } else {
           throw new Error("No records found");
@@ -50,13 +51,13 @@ const RetrieveAlbumsClient: React.FC<RetrieveAlbumsClientProps> = ({ albumid }) 
       </Link>
       <div className={styles.card}>
         <h2>
-          {albumData.basic_information.title} -{" "}
-          {albumData.basic_information.artists[0].name}
+          {albumData.title} -{" "}
+          {albumData.artists[0].name}
         </h2>
         <div className={styles.imageContainer}>
           <Image
-            src={albumData.basic_information.cover_image}
-            alt={albumData.basic_information.title}
+            src={albumData.thumb}
+            alt={albumData.title}
             fill
             priority
           />
