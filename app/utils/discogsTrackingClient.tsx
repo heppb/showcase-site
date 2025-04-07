@@ -7,7 +7,7 @@ import PlaysButton from "@/app/utils/plays-button";
 import retrieveRecords from "@/app/utils/retrieveRecords";
 import Link from "next/link";
 import ClearPlaysButton from "@/app/utils/clear-plays-button";
-import CreateSpotifyWrappedButton from "@/app/utils/spotifyWrappedButton";
+import CreateDiscogsWrappedButton from "@/app/utils/discogsWrappedButton";
 import DiscogRecord from '../models/DiscogRecord';
 
 function DiscogsTracking() {
@@ -159,7 +159,7 @@ function DiscogsTracking() {
           </button>
         </div>
         <div className={styles.buttonGroup}>
-          <CreateSpotifyWrappedButton />
+          <CreateDiscogsWrappedButton />
           <ClearPlaysButton albumNames={records.map(record => record.basic_information.title)} />
         </div>
         <div className={styles.controlsRow}>
