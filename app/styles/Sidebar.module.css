@@ -41,3 +41,12 @@
     background-color: #3b82f6;
     color: #fff;
   }
+  .imageContainer {
+    height: 200px;
+    width: 200px;
+    position: relative;
+  }
+  
+  .imageContainer img {
+    border-radius: 10px;
+  }

@@ -2,6 +2,12 @@
 
 import Link from 'next/link';
 import styles from "../styles/Sidebar.module.css";
+import Image from "next/image";
+import yoshi2 from "@/public/YoshiSquishForward.png"
+import yoshi3 from "@/public/YoshiSquishPog.png"
+import yoshi4 from "@/public/YoshiSquishSidePog.png"
+import yoshi5 from "@/public/YoshiTongueConfused.png"
+import yoshi6 from "@/public/YoshiTongueSideways.png"
 
 const Sidebar = () => {
   return (
@@ -20,6 +26,46 @@ const Sidebar = () => {
             <Link href="/cool-projects" className={styles.navLink}>Cool Projects</Link>
           </li>
         </ul>
+        <div className={styles.imageContainer}>
+        <Image
+          src={yoshi2}
+          alt="yoshi2"
+          fill
+          priority
+        />
+      </div>
+        <div className={styles.imageContainer}>
+        <Image
+          src={yoshi3}
+          alt="yoshi3"
+          fill
+          priority
+        />
+      </div>
+        <div className={styles.imageContainer}>
+        <Image
+          src={yoshi4}
+          alt="yoshi4"
+          fill
+          priority
+        />
+      </div>
+        <div className={styles.imageContainer}>
+        <Image
+          src={yoshi5}
+          alt="yoshi5"
+          fill
+          priority
+        />
+      </div>
+        <div className={styles.imageContainer}>
+        <Image
+          src={yoshi6}
+          alt="yoshi6"
+          fill
+          priority
+        />
+      </div>  
     </div>
   );
 };

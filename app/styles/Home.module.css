@@ -35,6 +35,14 @@
     padding: 6rem;
     min-height: 100vh;
   }
+  .mainPokemonShowdownStats {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    padding: 6rem;
+    min-height: 100vh;
+  }
   .loginSpacing{
     min-height: 25vh;
   }
