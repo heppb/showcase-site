@@ -1,0 +1,35 @@
+/* app/stats/stats.css */
+.stats-page {
+  max-width: 800px;
+  margin: 2rem auto;
+  font-family: Arial, sans-serif;
+}
+
+.select-container {
+  margin-bottom: 1.5rem;
+}
+
+.info-panel {
+  background: #f9f9f9;
+  padding: 1rem;
+  border-radius: 6px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.info-panel h2 {
+  margin-top: 0;
+}
+
+.info-panel ul {
+  padding-left: 1.2rem;
+}
+
+button {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background: #0070f3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}

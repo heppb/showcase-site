@@ -1,156 +1,113 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Select from 'react-select';
-import { Chart } from 'react-chartjs-2';
-import {
-  CategoryScale,
-  Chart as ChartJS,
-  LineController,
-  LineElement,
-  LinearScale,
-  PointElement,
-  Title,
-  Tooltip,
-  Legend,
-} from 'chart.js';
+import styles from "@/app/styles/Stats.module.css"
 
-ChartJS.register(
-  CategoryScale,
-  LineController,
-  LineElement,
-  LinearScale,
-  PointElement,
-  Title,
-  Tooltip,
-  Legend
-);
+// Import pre-downloaded local JSON
+import rawStats from '../../data/stats/2025-06/gen9ou-0.json';
 
-// -- hardcoded format list for now
-const formatOptions = [
-  { value: 'gen9ou', label: 'Gen 9 OU' },
-  { value: 'gen9uu', label: 'Gen 9 UU' },
-  { value: 'gen9ubers', label: 'Gen 9 Ubers' },
-];
+export interface PokemonStatsEntry {
+  Rank: number;
+  Usage: number;
+  Abilities?: Record<string, number>;
+  Items?: Record<string, number>;
+  Moves?: Record<string, number>;
+  Spreads?: Record<string, number>;
+  Teammates?: Record<string, number>;
+  EVs?: Record<string, number>;
+  Nature?: Record<string, number>;
+  TeraTypes?: Record<string, number>;
+}
 
-const d = new Date();
-d.setMonth(d.getMonth() - 1);
-const currentMonth = d.toISOString().slice(0, 7);
+export interface StatsFile {
+  data: Record<string, PokemonStatsEntry>;
+  info?: {
+    baseStats?: Record<string, Record<string, number>>;
+  };
+}
+
+const stats = rawStats as StatsFile;
+const pokemonNames = Object.keys(stats.data);
+const pokemonOptions = pokemonNames.map((name) => ({ label: name, value: name }));
+
+// Helper function to get top N sorted entries
+function topEntries(obj: Record<string, number> = {}, top = 5): [string, number][] {
+  return Object.entries(obj)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, top);
+}
 
 export default function StatsPage() {
-  const [selectedFormat, setSelectedFormat] = useState('gen9ou');
-  const [selectedPokemon, setSelectedPokemon] = useState<string[]>([]);
-  const [trendData, setTrendData] = useState<any>(null);
-  const [pokemonList, setPokemonList] = useState<any[]>([]);
-  const [data, setData] = useState<any>(null); // usage table data
+  const [selectedOption, setSelectedOption] = useState(pokemonOptions[0]);
+  const selectedName = selectedOption.value;
 
-  // Load monthly usage data for table + options
-  useEffect(() => {
-    fetch(`/api/stats/${currentMonth}/${selectedFormat}`)
-      .then(res => res.json())
-      .then(usage => {
-        setData(usage);
-        const names = Object.keys(usage);
-        setPokemonList(
-          names.map(name => ({ value: name, label: name }))
-        );
-      });
-  }, [selectedFormat]);
+  const mon = stats.data[selectedName];
+  const baseStats = stats.info?.baseStats?.[selectedName] ?? {};
 
-  // Load trend data when Pokémon selected
-  useEffect(() => {
-    if (selectedPokemon.length === 0) return;
-
-    const query = selectedPokemon.map(p => `pokemon=${encodeURIComponent(p)}`).join('&');
-    fetch(`/api/stats/trends?format=${selectedFormat}&${query}`)
-      .then(res => res.json())
-      .then(setTrendData);
-  }, [selectedPokemon, selectedFormat]);
-
-  const handlePokemonSelect = (
-    options: readonly { value: string; label: string }[] | null
-  ) => {
-    setSelectedPokemon(options ? options.map(opt => opt.value) : []);
-  };
+  if (!stats || !stats.data) {
+  return <div>Failed to load stats data.</div>;
+  }
 
   return (
-    <div style={{ padding: '2rem', maxWidth: '900px', margin: '0 auto' }}>
-      <h1>Usage Stats - {selectedFormat.toUpperCase()} ({currentMonth})</h1>
+    <div className={styles.statsPage}>
+      <h1 className={styles.title}>Gen 9 OU - June 2025 Usage</h1>
 
-      <div style={{ marginBottom: '1rem' }}>
-        <label>Format:</label>
-        <select
-          value={selectedFormat}
-          onChange={(e) => setSelectedFormat(e.target.value)}
-          style={{ marginLeft: '1rem' }}
-        >
-          {formatOptions.map((opt) => (
-            <option key={opt.value} value={opt.value}>{opt.label}</option>
-          ))}
-        </select>
-      </div>
-
-      <div style={{ marginBottom: '1rem' }}>
-        <label>Compare Pokémon:</label>
+      <div className={styles.selectContainer}>
         <Select
-          options={pokemonList}
-          isMulti
-          onChange={handlePokemonSelect}
-          placeholder="e.g. Garchomp, Blissey..."
-          isClearable
+          options={pokemonOptions}
+          value={selectedOption}
+          onChange={(option) => option && setSelectedOption(option)}
+          placeholder="Choose a Pokémon"
         />
       </div>
 
-      {trendData && (
-        <div style={{ marginBottom: '2rem' }}>
-          <h2>Usage Trends</h2>
-          <Chart
-            type="line"
-            data={{
-              labels: trendData.months,
-              datasets: trendData.trends.map((t: any, index: number) => ({
-                label: t.name,
-                data: t.usage,
-                borderColor: `hsl(${(index * 137.5) % 360}, 70%, 50%)`,
-                fill: false,
-              })),
-            }}
-            options={{
-              responsive: true,
-              plugins: {
-                legend: { position: 'bottom' as const },
-                title: { display: true, text: 'Monthly Usage (%)' },
-              },
-            }}
-          />
-        </div>
-      )}
+      <div className={styles.infoPanel}>
+        <h2>{selectedName}</h2>
+        <p><strong>Rank:</strong> {mon.Rank}</p>
+        <p><strong>Usage %:</strong> {(mon.Usage * 100).toFixed(2)}%</p>
 
-      {data && (
-        <div>
-          <h2>Current Month Usage Ranking</h2>
-          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-            <thead>
-              <tr>
-                <th style={{ textAlign: 'left', padding: '0.5rem' }}>#</th>
-                <th style={{ textAlign: 'left', padding: '0.5rem' }}>Pokémon</th>
-                <th style={{ textAlign: 'left', padding: '0.5rem' }}>Usage %</th>
-              </tr>
-            </thead>
-            <tbody>
-              {Object.entries(data)
-                .sort((a: any, b: any) => b[1].usage - a[1].usage)
-                .map(([name, stats]: any, index) => (
-                  <tr key={name}>
-                    <td style={{ padding: '0.5rem' }}>{index + 1}</td>
-                    <td style={{ padding: '0.5rem' }}>{name}</td>
-                    <td style={{ padding: '0.5rem' }}>{(stats.usage * 100).toFixed(2)}%</td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+        <h3>Base Stats</h3>
+        <ul>
+          {Object.entries(baseStats).map(([stat, val]) => (
+            <li key={stat}>{stat}: {val}</li>
+          ))}
+        </ul>
+
+        <h3>Top Moves</h3>
+        <ul>
+          {topEntries(mon.Moves).map(([move, pct]) => (
+            <li key={move}>{move}: {(pct * 100).toFixed(1)}%</li>
+          ))}
+        </ul>
+
+        <h3>Top Teammates</h3>
+        <ul>
+          {topEntries(mon.Teammates).map(([ally, pct]) => (
+            <li key={ally}>{ally}: {(pct * 100).toFixed(1)}%</li>
+          ))}
+        </ul>
+
+        <button
+          className={styles.exportButton}
+          onClick={() => {
+            const exportText = `
+${selectedName} @ ITEM
+Ability: ABILITY
+Tera Type: TYPE
+EVs: 252 HP / 252 Atk / 4 Spe
+- Move 1
+- Move 2
+- Move 3
+- Move 4
+`.trim();
+            navigator.clipboard.writeText(exportText);
+            alert('Copied to clipboard!');
+          }}
+        >
+          Export to Showdown
+        </button>
+      </div>
     </div>
   );
 }
